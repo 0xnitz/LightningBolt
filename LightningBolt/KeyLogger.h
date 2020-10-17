@@ -1,13 +1,5 @@
 #ifndef _KEYLOGGER_H_
-#define _KEYLOGGER_H
-
-#include <Windows.h>
-#include <string>
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream>
-#include <fstream>
-#include <thread>
+#define _KEYLOGGER_H_
 
 #include "IPogan.h"
 

