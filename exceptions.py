@@ -1,0 +1,2 @@
+class PoganException(Exception):
+    pass
