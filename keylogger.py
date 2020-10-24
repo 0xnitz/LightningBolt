@@ -9,7 +9,6 @@ class KeyLogger(PoganFeature):
     def __init__(self, filename: str, log_dir: str, log=True):
         super().__init__("", filename, log_dir, log)
 
-        self.alphabet = ascii_letters + digits + '!@#$%^&*()-+{}[]\';:\"<>/\\~`'
         self.semaphore = Semaphore(0)
         self.runner_thread = Thread(target=self.capture_keys)
 
