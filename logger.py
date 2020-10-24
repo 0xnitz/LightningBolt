@@ -4,10 +4,11 @@ from exceptions import PoganException
 
 
 class Logger:
-    def __init__(self, header: str, filename: str, log_dir: str):
+    def __init__(self, header: str, filename: str, log_dir: str, log: bool):
         self.header = header
         self.filename = filename
         self.log_dir = log_dir
+        self.log = log
 
         if path.exists(self.log_dir):
             chdir(self.log_dir)
@@ -17,6 +18,9 @@ class Logger:
                 pass
 
     def write(self, buf):
+        if not self.log:
+            return
+
         if path.exists(self.log_dir):
             chdir(self.log_dir)
         else:

