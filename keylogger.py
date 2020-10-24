@@ -1,4 +1,3 @@
-from string import ascii_letters, digits
 from threading import Thread, Semaphore
 from keyboard import on_release, unhook_all
 
