@@ -1,6 +1,7 @@
 from psutil import Process, process_iter, NoSuchProcess, AccessDenied, ZombieProcess
 from threading import Thread
 from time import sleep
+from os import getpid
 
 from pogan_feature import PoganFeature
 
@@ -31,7 +32,7 @@ class Assassin(PoganFeature):
         while not self.kill:
             for process in process_iter():
                 try:
-                    if process.name() in self.kill_order:
+                    if process.name() in self.kill_order and getpid() != process.pid:
                         self.logger.write(f'Killing {process.name()}')
                         Process(process.pid).terminate()
                 except (NoSuchProcess, AccessDenied, ZombieProcess):
