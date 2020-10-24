@@ -1,8 +1,8 @@
-from pogan import Pogan
+from lightning_bolt import LightningBolt
 
 
 def main():
-    p = Pogan()
+    p = LightningBolt()
     p.run()
 
 
